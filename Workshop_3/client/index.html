@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 1 - Consume API</title>
+  <script>
+    async function getTeachers() {
+      const response = await fetch("http://localhost:3001/api/teachers");
+      const teachers = await response.json();
+      console.log(teachers);
+
+      const container = document.getElementById('result');
+      teachers.forEach(element => {
+        const item = document.createElement('li');
+        item.innerHTML = `${element.first_name} ${element.last_name}`;
+        container.appendChild(item)
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <button onclick="getTeachers();">Get Teacher</button>
+  <h3>Results:</h3>
+  <ul id="result"></ul>
+
+  <form action="save.php" method="post">
+    <div class="form-group">
+      <label for="">First Name</label>
+      <input type="text" name="first_name" class="form-control" placeholder="" aria-describedby="helpId">
+      <small id="helpId" class="text-muted">Escriba su primer nombre</small>
+    </div>
+  </form>
+</body>
+
+</html>
