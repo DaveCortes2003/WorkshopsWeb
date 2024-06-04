@@ -16,7 +16,7 @@ app.use(cors({
 }));
 
 const { teacherGet, teacherPost, teacherPatch, teacherDelete } = require('./controllers/teacherController');
-const { majorGet, majorPost, majorPatch, majorDelete } = require('./controllers/majorController');
+const { majorGet, majorPost, majorPut, majorDelete } = require('./controllers/majorController');
 
 
 
@@ -31,7 +31,7 @@ app.get("/api/teachers/",teacherGet);
 // listen to the task request Majors:
 app.post("/api/majors", majorPost);
 app.get("/api/majors/",majorGet);
-app.post("/api/majors", majorPatch);
+app.put("/api/majors", majorPut);
 app.delete("/api/majors/",majorDelete);
 
 app.listen(3001, () => console.log(`Example app listening on port 3001!`))
