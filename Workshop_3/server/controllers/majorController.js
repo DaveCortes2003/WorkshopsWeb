@@ -110,7 +110,7 @@ const majorDelete = (req, res) => {
 
     if (req.query && req.query.id) {
         Major.findByIdAndDelete(req.query.id)
-            .then(major => {
+            .then(() => {
                 res.status(204);
                 res.json({});
             })
