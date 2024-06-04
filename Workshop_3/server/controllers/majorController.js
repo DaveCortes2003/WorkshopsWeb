@@ -1,12 +1,5 @@
 const Major = require("../models/majorModel");
 
-/**
- * Creates a teacher
- *
- * @param {*} req
- * @param {*} res
- */
-
 const majorPost = (req, res) => {
     let major = new Major();
 
@@ -66,7 +59,6 @@ const majorGet = (req, res) => {
 
 
 const majorPut = (req, res) => {
-    // get teacher by id
     if (req.query && req.query.id) {
         Major.findById(req.query.id)
             .then(major => {
