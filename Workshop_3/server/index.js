@@ -1,8 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
+const mongoString = process.env.DATABASE_URL;
 // database connection
 const mongoose = require("mongoose");
-const db = mongoose.connect("mongodb+srv://davecortes:gamerdeivy@workshop1.2jqozfw.mongodb.net/testDatabase");
+const db = mongoose.connect(mongoString);
 
 // parser for the request body (required for the POST and PUT methods)
 const bodyParser = require("body-parser");
