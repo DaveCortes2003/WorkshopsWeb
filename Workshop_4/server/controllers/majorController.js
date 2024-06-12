@@ -45,15 +45,30 @@ const majorGet = (req, res) => {
                 console.log('error while queryting the major', err)
                 res.json({ error: "major doesnt exist" })
             });
-    } else {
+    }
+    else {
+
         Major.find()
             .then(majors => {
+                if(req.query && req.query.name){
+                    majors = majors.filter(major => major.name.toLowerCase().includes(req.query.name.toLowerCase()))
+                    if(req.query.sort){
+                        if(req.query.sort.toLowerCase() === "asc"){
+                            majors = majors.sort((a,b)=> (a.name > b.name ? 1 : -1))
+                        }
+                        else if(req.query.sort.toLowerCase() === "desc"){
+                            majors = majors.sort((a,b)=> (a.name < b.name ? 1 : -1))
+                        }
+                    }
+                }
                 res.json(majors);
             })
             .catch(err => {
                 res.status(422);
                 res.json({ "error": err });
             });
+
+
     }
 };
 
@@ -72,7 +87,7 @@ const majorPut = (req, res) => {
                 major.name = req.body.name
                 major.code = req.body.code
                 major.description = req.body.description
-                
+
                 major.save()
                     .then(major => {
                         res.status(200); // OK
@@ -94,7 +109,7 @@ const majorPut = (req, res) => {
                         console.log('error while queryting the teacher', err)
                         res.json({ error: "Major doesnt exist" })
                     })
-                
+
             });
     }
 }
