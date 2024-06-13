@@ -48,6 +48,25 @@ const majorGet = (req, res) => {
     }
     else {
 
+        if (req.query && req.query.name) {
+            let order = null;
+            if (req.query.sort === "asc") {
+                order = {name : 1};
+            }
+            else if (req.query.sort === "desc") {
+                order = {name :-1};
+            }
+
+            Major.find({ "name": { "$regex": req.query.name, "$options": "i" } }).sort(order)
+                .then(majors => {
+                    res.json(majors);
+                })
+                .catch(err => {
+                    res.status(422);
+                    res.json({ "error": err });
+                });
+        }
+        /*
         Major.find()
             .then(majors => {
                 if(req.query && req.query.name){
@@ -67,7 +86,7 @@ const majorGet = (req, res) => {
                 res.status(422);
                 res.json({ "error": err });
             });
-
+        */
 
     }
 };
