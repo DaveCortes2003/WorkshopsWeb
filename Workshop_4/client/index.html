@@ -11,8 +11,24 @@
 
     const error = (e) => console.log(e.target.responseText);
 
-    function getMajors() {
+    function getMajors(order) {
       let url = "http://localhost:3001/api/majors";
+      let findWord= document.getElementById("searchTab").value;
+      if(order == "asc"){
+        url = `${url}?sort=${order}`;
+      }
+      if(order == "desc"){
+        url = `${url}?sort=${order}`;
+      }
+      if(findWord =="" || findWord == null){
+        if(order != "asc" && order != "desc"){
+          url = `${url}?name=${findWord}`;
+        }
+        else{
+          url = `${url}&name=${findWord}`;
+        }
+      }
+      
       const ajaxRequest = new XMLHttpRequest();
       ajaxRequest.addEventListener("load", (response) => {
         const taskResponse = JSON.parse(response.target.responseText);
@@ -23,7 +39,7 @@
       ajaxRequest.setRequestHeader("Content-Type", "application/json");
       ajaxRequest.send();
     }
-    
+
     let idEditing;
     function editMajor(id) {
       let url = "http://localhost:3001/api/majors";
@@ -153,6 +169,21 @@
   <div class=" mt-5 container-xl rounded border border-secondary shadow p-3 mb-5 bg-body rounded">
     <button type="button" class="btn btn-primary" onclick="getMajors();">Get Majors</button>
 
+    <form class="d-flex" role="search">
+      <input id="searchTab" class="form-control me-2" type="search" placeholder="Search" value="" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+         Order
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" onclick="getMajors('asc');">Asc</a></li>
+          <li><a class="dropdown-item" href="#" onclick="getMajors('desc')">Desc</a></li>
+        </ul>
+      </div>
+    </form>
+
     <div class="text-center">
       <h3 class="card-title mb-5 mt-3">List of Majors</h3>
     </div>
@@ -187,7 +218,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="editMajor(idEditing);">Save changes</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="editMajor(idEditing);">Save
+            changes</button>
         </div>
       </div>
     </div>
