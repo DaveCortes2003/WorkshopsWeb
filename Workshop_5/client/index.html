@@ -11,186 +11,29 @@
 
     const error = (e) => console.log(e.target.responseText);
 
-    function getMajors() {
-      let url = "http://localhost:3001/api/majors";
-      const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", (response) => {
-        const taskResponse = JSON.parse(response.target.responseText);
-        renderMajors(taskResponse);
-      });
-      ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("GET", url);
-      ajaxRequest.setRequestHeader("Content-Type", "application/json");
-      ajaxRequest.send();
+    function login() {
+      let username = document.getElementById('exampleInputUsername');
+      let password = document.getElementById('exampleInputPassword');
     }
-    
-    let idEditing;
-    function editMajor(id) {
-      let url = "http://localhost:3001/api/majors";
-      if (id) {
-        url = `${url}?id=${id}`;
-      }
-      const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", (response) => {
-        const taskResponse = JSON.parse(response.target.responseText);
-      });
-      ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("PUT", url);
-      ajaxRequest.setRequestHeader("Content-Type", "application/json");
-
-      const data = {
-        'name': document.getElementById('editName').value,
-        'code': document.getElementById('editCode').value,
-        'description': document.getElementById('editDescription').value,
-      };
-      ajaxRequest.send(JSON.stringify(data));
-      console.log("Major edited")
-      alert("Major edited");
-      getMajors();
-    };
-
-    function loadInformation(id) {
-      let url = "http://localhost:3001/api/majors";
-      idEditing = id;
-      if (id) {
-        url = `${url}?id=${id}`;
-      }
-      const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", (response) => {
-        const taskResponse = JSON.parse(response.target.responseText);
-        document.getElementById('editName').value = taskResponse.name;
-        document.getElementById('editCode').value = taskResponse.code;
-        document.getElementById('editDescription').value = taskResponse.description;
-      });
-      ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("GET", url);
-      ajaxRequest.setRequestHeader("Content-Type", "application/json");
-      ajaxRequest.send();
-    }
-
-    function deleteMajor(id) {
-      let url = "http://localhost:3001/api/majors";
-      if (id) {
-        url = `${url}?id=${id}`;
-
-        const ajaxRequest = new XMLHttpRequest();
-        ajaxRequest.addEventListener("error", error);
-        ajaxRequest.open("DELETE", url);
-        ajaxRequest.setRequestHeader("Content-Type", "application/json");
-        ajaxRequest.send();
-      }
-      else {
-        console.log("La id es invalida")
-      }
-      location.reload();
-    };
-
-    function addMajor() {
-      const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", (response) => {
-        const taskResponse = JSON.parse(response.target.responseText);
-      });
-      ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("POST", "http://localhost:3001/api/majors");
-      ajaxRequest.setRequestHeader("Content-Type", "application/json");
-
-      const data = {
-        'name': document.getElementById('name').value,
-        'code': document.getElementById('code').value,
-        'description': document.getElementById('description').value,
-      };
-      ajaxRequest.send(JSON.stringify(data));
-      console.log("Major added")
-      location.reload();
-    }
-
-    function renderMajors(majors) {
-      let html = "<table>";
-      html += `<thead>
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Code</th>
-                  <th scope="col">Description</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>`;
-      majors.forEach(majors => {
-        html += `<tr><td>${majors.name}</td><td>${majors.code}</td><td>${majors.description}</td><td><button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-secondary" onclick="loadInformation('${majors._id}')"> Edit </button> <button class="btn btn-danger" onclick="deleteMajor('${majors._id}')"> Delete </button> </td></tr>`;
-      });
-      html += '</tbody></table>';
-
-      document.getElementById('tableList').innerHTML = html;
-    }
-    getMajors();
   </script>
 </head>
 
 <body>
   <div class="text-center">
-    <h3 class="card-title mt-5 mb-3">Add Major</h3>
+    <h3 class="card-title mt-5 mb-3">Login</h3>
   </div>
-  <div class="container-sm mt-5 rounded border border-secondary ">
-    <form>
-      <div class="mb-1 mt-2">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" aria-describedby="emailHelp">
-      </div>
-      <div class="mb-1">
-        <label for="code" class="form-label">Code</label>
-        <input type="text" class="form-control" id="code" maxlength="3">
-      </div>
-      <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <input type="text" class="form-control" id="description">
-      </div>
-
-    </form>
-    <button class="btn btn-primary mb-2" onclick="addMajor();">Add</button>
-  </div>
-
-
-  <div class=" mt-5 container-xl rounded border border-secondary shadow p-3 mb-5 bg-body rounded">
-    <button type="button" class="btn btn-primary" onclick="getMajors();">Get Majors</button>
-
-    <div class="text-center">
-      <h3 class="card-title mb-5 mt-3">List of Majors</h3>
+  <form>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
     </div>
-
-    <table id="tableList" class="table">
-    </table>
-  </div>
-
-
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Major</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-1 mt-2">
-              <label for="editName" class="form-label">Name</label>
-              <input type="text" class="form-control" id="editName" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-1">
-              <label for="editCode" class="form-label">Code</label>
-              <input type="text" class="form-control" id="editCode" maxlength="3">
-            </div>
-            <div class="mb-3">
-              <label for="editDescription" class="form-label">Description</label>
-              <input type="text" class="form-control" id="editDescription">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="editMajor(idEditing);">Save changes</button>
-        </div>
-      </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword">
     </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
