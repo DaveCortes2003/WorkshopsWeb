@@ -5,6 +5,7 @@ const router = express.Router()
 module.exports = router;
 
 const Model = require('../models/model');
+const Teacher = require('../models/teacherModel')
 
 
 
@@ -27,8 +28,18 @@ router.post('/post', async (req, res) => {
 //Get all Method
 router.get('/getAll', async (req, res) => {
     try{
-        const data = await Model.find();
-        res.json(data)
+
+        await Model.find().populate('teacher')
+        .then( courses => {
+          res.json(courses);
+        })
+        .catch(err => {
+          res.status(422);
+          res.json({ "error": err });
+        });
+
+        //const data = await Model.find().populate('teacher')
+        //res.json(data)
     }
     catch(error){
         res.status(500).json({message: error.message})

@@ -8,6 +8,10 @@ const dataSchema = new mongoose.Schema({
     age: {
         required: true,
         type: Number
+    },
+    teacher :{
+        type: mongoose.ObjectId,
+        ref : 'teachers'
     }
 })
 

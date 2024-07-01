@@ -1,41 +1,34 @@
 const User = require("../models/userModel");
 
 const userPost = async (req, res) => {
-    let user = new User();
+    let user = new User(req.body);
 
     const bcrypt = require('bcrypt');
     const saltRounds = 10;
     const myPlaintextPassword = req.body.password;
-
-    user.username = req.body.username;
-    user.password = req.body.password;
-    user.description = req.body.description;
-
-
-
-
 
 
     if (user.username && user.password) {
         await bcrypt.hash(myPlaintextPassword, saltRounds, function (err, hash) {
             user.password = hash.toString();
             // Store hash in your password DB.
+            user.save()
+                .then(() => {
+                    res.status(201); // CREATED
+                    res.header({
+                        'location': `/api/users/?id=${user.id}`
+                    });
+                    res.json(user);
+                })
+                .catch((err) => {
+                    res.status(422);
+                    console.log('error while saving the user', err);
+                    res.json({
+                        error: 'There was an error saving the user'
+                    });
+                });
         });
-        await user.save()
-            .then(() => {
-                res.status(201); // CREATED
-                res.header({
-                    'location': `/api/users/?id=${user.id}`
-                });
-                res.json(user);
-            })
-            .catch((err) => {
-                res.status(422);
-                console.log('error while saving the user', err);
-                res.json({
-                    error: 'There was an error saving the user'
-                });
-            });
+
     } else {
         res.status(422);
         console.log('error while saving the user')
